@@ -104,27 +104,12 @@ class image_retrieval:
             dist4 = self.sess4.run(self.count.dist4, feed_dict={
                     self.count.retrieved_img_feat4: self.retrieved_img_feat,
                     })
-        #print('Read train data time: {} seconds2'.format(round(time.time() - start_time, 2)))
-        #coord = tf.train.Coordinator()
-        #threads = tf.train.start_queue_runners(coord=coord, sess=self.sess)
-        #dist = self.sess.run(dist)
+
         dist12 = np.concatenate((dist1[0],dist2[0]),axis = 0)
         dist123 = np.concatenate((dist12,dist3[0]),axis = 0)
         dist = np.concatenate((dist123,dist4[0]),axis = 0)
-            #print(dist1)
-            #print(dist1.shape)
-
-        #print(pool.shape)
 
         sortedIndex_mat=np.argsort(dist)
-        #print(sortedIndex_mat)
-        #sorted_dist_mat=np.sort(dist)
-        #print(sortedIndex_mat.shape)
-        #print(sorted_dist_mat.shape)
-        #img_id1 = [npz['img'][sortedIndex_mat[0][i]] for i in range(20)]
-        #print(sortedIndex_mat)
-        #print('........sortedIndex_mat..........')
-        #print(self.img_id)
         img_id2 = [str(img_id1, encoding = "utf-8") for img_id1 in self.img_id]
         img_len = len(img_id2)
         img_id2 = [img_id2[sortedIndex_mat[i]] for i in range(img_len)]
