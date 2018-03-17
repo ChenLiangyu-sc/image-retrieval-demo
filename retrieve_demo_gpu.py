@@ -60,13 +60,11 @@ class image_retrieval:
 
 
     def retrieval(self,path):
-        image=cv2.imread(path)
         
+        image=cv2.imread(path)
         image=cv2.resize(image, (227,227))
         img = image[np.newaxis]
         img = img - self.image_mean
-
-        start_time = time.time()
 
         self.retrieved_img_feat, self.predictions = self.sess.run([self.siamese.retrieved_img_feat1, self.siamese.predictions], feed_dict={
             self.siamese.x1: img
