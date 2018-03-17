@@ -21,8 +21,8 @@ class image_retrieval:
 
     def __init__(self, args):
         self.args = args
-        config = tf.ConfigProto()
         os.environ["CUDA_VISIBLE_DEVICES"] = self.args.gpu_id #use GPU with ID=0
+        config = tf.ConfigProto()
         config.gpu_options.allow_growth = True
 
         self.sess = tf.Session(config=config)
