@@ -22,13 +22,13 @@ class image_retrieval:
     def __init__(self, args):
         self.args = args
         config = tf.ConfigProto()
-        os.environ["CUDA_VISIBLE_DEVICES"] = '5' #use GPU with ID=0
+        os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id #use GPU with ID=0
         config.gpu_options.allow_growth = True
 
         self.sess = tf.Session(config=config)
         self.siamese = inference2.siamese()
         config.gpu_options.allow_growth = True
-        
+
         self.count = count.count()
 
         with self.count.g1.as_default():
@@ -48,20 +48,13 @@ class image_retrieval:
         saver.restore(self.sess, self.args.pretrained_model)
 
 
-
-
-        aaa = np.load(args.image_mean_dir)
-        bbb = []
-        aaa = aaa.tolist()
-        for _ in range(1):
-            bbb.extend(aaa)
-        aaa = np.array(bbb)
+        image_mean = np.load(args.image_mean_dir)
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(coord=coord, sess=self.sess)
-        self.aaa = np.transpose(aaa, (0, 2, 3, 1))
+        self.image_mean = np.transpose(image_mean, (0, 2, 3, 1))
 
-        self.img_id = np.load('./img_id.npy')
-        dict = np.load('./dict.npy')
+        self.img_id = np.load(args.img_id)
+        dict = np.load(args.dict_idna)
         self.dict = dict.tolist()
         path, _ = self.retrieval(path = self.args.initialize_image_dir)
 
@@ -71,7 +64,7 @@ class image_retrieval:
         
         image=cv2.resize(image, (227,227))
         img = image[np.newaxis]
-        img = img - self.aaa
+        img = img - self.image_mean
 
         start_time = time.time()
 
