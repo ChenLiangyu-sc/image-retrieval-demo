@@ -1,12 +1,8 @@
-# image-retrieval-demo
 tensorflow图像检索演示demo
 
-输入query路径，获得与query相似图片
+运行run_main.py 启动程序，等待将图片特征读入GPU，便可输入需要检索query路径，将返回与query图片距离最近的200张图片的子目录和图片名。
 
-例子
+count_dist.py文件为图片的余弦距离的计算部分。
 
-import retrieve_demo_gpu
+inference.py文件为vggs网络，为网络前传部分。
 
-retrieve_demo=retrieve_demo_gpu.image_retrieval() #初始化，将检索库数据存入显存。由于一个计算图只能容纳2G，这里建了4个计算图，加上默认计算图，共5个计算图
-
-retrieve_demo.retrieval(path='query的路径')#获得query与图片库所有图片余弦距离，排序得到余弦距离最近的n长图片
