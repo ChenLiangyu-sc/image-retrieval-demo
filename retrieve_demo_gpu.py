@@ -22,7 +22,7 @@ class image_retrieval:
     def __init__(self, args):
         self.args = args
         config = tf.ConfigProto()
-        os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id #use GPU with ID=0
+        os.environ["CUDA_VISIBLE_DEVICES"] = self.args.gpu_id #use GPU with ID=0
         config.gpu_options.allow_growth = True
 
         self.sess = tf.Session(config=config)
@@ -53,8 +53,8 @@ class image_retrieval:
         threads = tf.train.start_queue_runners(coord=coord, sess=self.sess)
         self.image_mean = np.transpose(image_mean, (0, 2, 3, 1))
 
-        self.img_id = np.load(args.img_id)
-        dict = np.load(args.dict_idna)
+        self.img_id = np.load(self.args.img_id)
+        dict = np.load(self.args.dict_idna)
         self.dict = dict.tolist()
         path, _ = self.retrieval(path = self.args.initialize_image_dir)
 
