@@ -17,17 +17,13 @@ class siamese:
         self._extra_train_ops = []
 
         self.x1 = tf.placeholder(tf.float32, [None, 227, 227, 3])
-        self.x2 = tf.placeholder(tf.float32, [None, 227, 227, 3])
         self.labels1 = tf.placeholder(tf.int32)
-        self.labels2 = tf.placeholder(tf.int32)
         self.keep_prob = tf.constant(1,tf.float32)
         self.y_ = tf.placeholder(tf.float32, [None])
 
         with tf.variable_scope("siamese") as scope:
-            self.o1, self.p1, self.q1, self.k1, self.pool51, self.pool21, self.loss4, self.conv21, self.norm11, self.conv11, self.conv21, self.conv51, self.conv31, self.conv41, self.retrieved_img_feat1 = self.network(self.x1)
-            scope.reuse_variables()
-            self.o2, self.p2, self.q2, self.k2, self.pool52, self.pool22, self.loss5, self.conv22, self.norm12, self.conv12, self.conv22, self.conv52, self.conv32, self.conv42, self.retrieved_img_feat2 = self.network(self.x2)
-
+            self.p1, self.retrieved_img_feat1 = self.network(self.x1)
+            
         self.predictions = self.loss_With_Softmax1(self.p1)
         
     def conv_op(self, input_op, name, kh, kw, n_out, dh, dw, is_training):
@@ -88,7 +84,7 @@ class siamese:
     
     def mpool_op(self, input_op, name, kh, kw, dh, dw):
         shp = input_op.get_shape()
-        if (shp[1]-kh)%dh != 0:
+        if (shp[1]-kh)%dh != 0:#由于用的caffe的与训练模型，所以需要和caffe保持一直，tensorflow的pool层和caffe存在差异，这里稍做处理。
             input_op = tf.pad(input_op, [[0,0],[0,1],[0, 1],[0,0]])
             shp = input_op.get_shape()
             if (shp[1]-kh)%dh != 0:
