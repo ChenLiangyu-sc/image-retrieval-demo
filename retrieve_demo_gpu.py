@@ -48,7 +48,7 @@ class image_retrieval:
         saver.restore(self.sess, self.args.pretrained_model)
 
 
-        image_mean = np.load(args.image_mean_dir)
+        image_mean = np.load(self.args.image_mean_dir)
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(coord=coord, sess=self.sess)
         self.image_mean = np.transpose(image_mean, (0, 2, 3, 1))
