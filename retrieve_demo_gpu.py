@@ -106,16 +106,13 @@ class image_retrieval:
         img_id2 = [str(img_id1) for img_id1 in self.img_id]
         img_len = len(img_id2)
         img_id2 = [img_id2[sortedIndex_mat[i]] for i in range(img_len)]
-        img_id20 = []
+        root_dir = []
         for mm in img_id2:#返回根目录和图片名字
+
             mm1 = mm.split('/')
-
             mm2 = mm1[6:9]
-
             mm3 = '/'.join(mm2)
-
-            img_id20.append(mm3)
-
-
-        return img_id20, name
+            root_dir.append(mm3)
+            
+        return root_dir, name
 
